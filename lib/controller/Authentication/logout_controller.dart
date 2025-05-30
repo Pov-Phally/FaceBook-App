@@ -17,12 +17,23 @@ class LogoutController extends GetxController {
       loginController.storage.remove('token');
       loginController.isLogin.value = false;
       // Navigate to login
-      Get.offAll(() => LoginScreen());
       AlertWidget.show(
         context: Get.context!,
-        title: "Success",
-        message: "Logout successful",
-        showCancelButton: false,
+        title: "Logout",
+        message: "Are you sure you want to logout?",
+        onConfirm: () {
+          Get.offAll(() => LoginScreen());
+          Future.delayed(const Duration(milliseconds: 100), () {
+            AlertWidget.show(
+              context: Get.context!,
+              title: "Success",
+              message: "You have successfully logged out.",
+              showCancelButton: false,
+              showConfirmButton: false,
+              duration: const Duration(seconds: 2),
+            );
+          });
+        },
       );
     } else {
       return AlertWidget.show(

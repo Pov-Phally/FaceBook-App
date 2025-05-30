@@ -54,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                             return CustomButton(
                               text:
                                   controller.isLoading.value
-                                      ? 'Login'
+                                      ? 'Logging...'
                                       : 'Login',
                               onPressed: () {
                                 if (controller.loginFormKey.currentState!

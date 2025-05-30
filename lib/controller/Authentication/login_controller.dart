@@ -53,23 +53,20 @@ class LoginController extends GetxController {
           print("Login successful: ${loginModel.token}");
         }
         storage.write('token', loginModel.token);
+        isLogin.value = true;
+        emailController.clear();
+        passwordController.clear();
+        Get.offAll(() => Navigation());
         AlertWidget.show(
           context: Get.context!,
           title: "Success",
           message: "Login successful",
+         showConfirmButton: false,
           showCancelButton: false,
+          duration: const Duration(seconds: 1),
         );
-        isLogin.value = true;
-        Get.offAll(() => Navigation());
       },
     );
   }
 
-  void navigateToSignup() {
-    Get.toNamed('/signup');
-  }
-
-  void navigateToForgotPassword() {
-    Get.toNamed('/forgot-password');
-  }
 }
