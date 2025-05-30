@@ -94,11 +94,7 @@ class SignupScreen extends StatelessWidget {
                       onPressed: () {
                         if (controller.registerFormKey.currentState!
                             .validate()) {
-                          controller.signup(
-                            name: controller.usernameController.text.trim(),
-                            email: controller.emailController.text.trim(),
-                            password: controller.passwordController.text.trim(),
-                          );
+                          controller.signup();
                         }
                       },
                     );

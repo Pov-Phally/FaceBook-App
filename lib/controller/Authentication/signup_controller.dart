@@ -13,16 +13,12 @@ class SignupController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final isLoading = false.obs;
 
-  Future<void> signup({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signup() async {
     isLoading.value = true;
     final response = await signupRepository.signup(
-      name: name,
-      email: email,
-      password: password,
+      name: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
     );
     isLoading.value = false;
     response.fold(

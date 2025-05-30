@@ -32,13 +32,13 @@ class SignupRepository extends GetxController {
         if (kDebugMode) {
           print(response.data);
         }
-        return Left("Failed to register user - $parseErrors(${response.data})");
+        return Left("Failed to register user - ${parseErrors(response.data)}");
       }
     } on DioException catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      return Left("Failed to register user - $parseErrors(${e.message})");
+      return Left("Failed to register user - ${parseErrors(e.response?.data)}");
     }
   }
 }

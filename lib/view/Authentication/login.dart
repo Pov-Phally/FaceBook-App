@@ -50,15 +50,20 @@ class LoginScreen extends StatelessWidget {
                             controller: controller.passwordController,
                           ),
                           SizedBox(height: screenHeight * 0.025),
-                          CustomButton(
-                            text: 'Login',
-                            onPressed: () {
-                              if (controller.loginFormKey.currentState!
-                                  .validate()) {
-                                controller.login();
-                              }
-                            },
-                          ),
+                          Obx(() {
+                            return CustomButton(
+                              text:
+                                  controller.isLoading.value
+                                      ? 'Login'
+                                      : 'Login',
+                              onPressed: () {
+                                if (controller.loginFormKey.currentState!
+                                    .validate()) {
+                                  controller.login();
+                                }
+                              },
+                            );
+                          }),
                           CustomTextButton(
                             text: 'Forget Password?',
                             onPressed: () {},
