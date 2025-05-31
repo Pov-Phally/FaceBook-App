@@ -16,16 +16,15 @@ class Navigation extends StatelessWidget {
           backgroundColor: Colors.white,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           selectedIndex: navController.selectedIndex.value,
-          onDestinationSelected: (index) =>
-          navController.selectedIndex.value = index,
+          onDestinationSelected:
+              (index) => navController.selectedIndex.value = index,
           destinations: [
             NavigationDestination(icon: Icon(Icons.home_filled), label: "Home"),
-            NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
+            NavigationDestination(icon: Icon(Icons.menu), label: "Menu"),
           ],
         );
       }),
       body: Obx(() => navController.pages[navController.selectedIndex.value]),
-
     );
   }
 }

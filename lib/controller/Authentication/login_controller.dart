@@ -13,6 +13,7 @@ class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   var isLoading = false.obs;
+  var isPasswordVisible = true.obs;
   var isLogin = false.obs;
   final storage = GetStorage();
   @override

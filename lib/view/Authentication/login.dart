@@ -44,11 +44,25 @@ class LoginScreen extends StatelessWidget {
                             controller: controller.emailController,
                           ),
                           SizedBox(height: screenHeight * 0.025),
-                          CustomTF(
-                            labelText: 'Password',
-                            validator: validatePassword,
-                            controller: controller.passwordController,
-                          ),
+                          Obx(() {
+                            return CustomTF(
+                              labelText: 'Password',
+                              validator: validatePassword,
+                              controller: controller.passwordController,
+                              obscureText: controller.isPasswordVisible.value,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  controller.isPasswordVisible.value =
+                                      !controller.isPasswordVisible.value;
+                                },
+                              ),
+                            );
+                          }),
                           SizedBox(height: screenHeight * 0.025),
                           Obx(() {
                             return CustomButton(

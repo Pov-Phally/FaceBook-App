@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../common/widget/news feed/news_feed.dart';
 import '../../common/widget/post/post_section.dart';
-import '../post/upload_post.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -60,15 +58,6 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               child: PostSection(
                 imageUrl: posts[0]['profile'] ?? '',
-                onPressed: () {
-                  Get.to(
-                    () => UploadPost(),
-                    fullscreenDialog: true,
-                    transition: Transition.downToUp,
-                    popGesture: true,
-                    preventDuplicates: true,
-                  );
-                },
               ),
             ),
             Divider(thickness: 3, color: Colors.grey),
