@@ -15,7 +15,7 @@ class NewsFeed extends StatelessWidget {
   final String name;
   final String time;
   final String status;
-  final String postImage;
+  final Widget postImage;
   final String likeCounts;
   final String commentCounts;
   @override
@@ -66,7 +66,7 @@ class NewsFeed extends StatelessWidget {
         ),
         SizedBox(height: 10),
         //Post Image
-        Image.network(postImage, fit: BoxFit.cover),
+       postImage,
         //Like and Comment Count
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),

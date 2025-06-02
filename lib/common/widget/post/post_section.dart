@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_media/common/BaseUrl/base_url.dart';
+import 'package:social_media/controller/User/user_detail_controller.dart';
 
 import '../../../view/post/upload_post.dart';
 
 class PostSection extends StatelessWidget {
-  const PostSection({super.key, required this.imageUrl});
-  final String imageUrl;
+  PostSection({super.key});
+
+  final controller = Get.put(UserDetailController());
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(radius: 20, backgroundImage: NetworkImage(imageUrl)),
+        CircleAvatar(
+          radius: 20,
+          backgroundImage: NetworkImage(
+            baseUrl + controller.user.value.user!.profilePicture.toString(),
+          ),
+        ),
         Expanded(
           child: TextFormField(
             onTap: () {

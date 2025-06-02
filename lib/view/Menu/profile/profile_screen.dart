@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_media/common/widget/news%20feed/news_feed.dart';
 
+import '../../../common/BaseUrl/base_url.dart';
+import '../../../common/widget/Profile Page/cover_section.dart';
+import '../../../common/widget/Profile Page/profile_section.dart';
 import '../../../common/widget/post/post_section.dart';
+import '../../../controller/User/user_detail_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,77 +15,39 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final controller = Get.put(UserDetailController());
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios_new),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(
-              height: screenHeight * 0.25,
-              width: double.infinity,
-              decoration: BoxDecoration(color: Colors.blueGrey),
-            ),
-            Positioned(
-              top: screenHeight * 0.06, // Adjust the position as needed
-              left: screenHeight * 0.002, // Adjust the position as needed
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-              ),
-            ),
-            Positioned(
-              top: screenHeight * 0.20,
-              right: screenHeight * 0.002,
-              child: IconButton(
-                onPressed: () {
-                  // Add your settings action here
-                },
-                icon: Icon(Icons.camera_alt, color: Colors.white),
-              ),
-            ),
+            //Cover Section
+            CoverSection(screenHeight: screenHeight, screenWidth: screenWidth),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: screenHeight * 0.125),
-                Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.02,
-                      ),
-                      child: CircleAvatar(
-                        radius: screenHeight * 0.1,
-                        backgroundColor: Colors.red,
-                        child: Icon(Icons.person, size: screenHeight * 0.1),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: screenHeight * 0.02,
-                      right: screenWidth * 0.02,
-                      child: CircleAvatar(
-                        radius: screenHeight * 0.02,
-                        backgroundColor: Colors.blueGrey,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                SizedBox(height: screenHeight * 0.18),
+                // Profile Section
+                ProfileSection(
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                  image:
+                      baseUrl +
+                      controller.user.value.user!.profilePicture.toString(),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
                   child: Text(
-                    'User Name',
+                    controller.user.value.user!.name.toString(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -89,29 +56,81 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 Divider(thickness: 3, color: Colors.grey),
+                // Post Section
                 Padding(
                   padding: EdgeInsets.all(screenWidth * 0.02),
-                  child: PostSection(
-                    imageUrl:
-                        "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-                  ),
+                  child: PostSection(),
                 ),
                 Divider(thickness: 3, color: Colors.grey),
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 3,
+                  itemCount: controller.user.value.user!.posts?.length ?? 0,
                   itemBuilder: (context, index) {
                     return NewsFeed(
                       profile:
-                          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-                      name: 'Mengly',
+                          baseUrl +
+                          controller.user.value.user!.profilePicture.toString(),
+                      name: controller.user.value.user!.name.toString(),
                       time: '2h ago',
-                      status: 'public',
+                      status:
+                          controller.user.value.user!.posts != null &&
+                                  controller.user.value.user!.posts!.isNotEmpty
+                              ? controller
+                                  .user
+                                  .value
+                                  .user!
+                                  .posts![index]
+                                  .content
+                                  .toString()
+                              : '',
+                      likeCounts:
+                          controller
+                                          .user
+                                          .value
+                                          .user!
+                                          .posts![index]
+                                          .likesCount !=
+                                      null &&
+                                  controller.user.value.user!.posts!.isNotEmpty
+                              ? controller
+                                  .user
+                                  .value
+                                  .user!
+                                  .posts![index]
+                                  .likesCount
+                                  .toString()
+                              : '0',
+                      commentCounts:
+                          controller.user.value.user!.posts != null
+                              ? controller
+                                  .user
+                                  .value
+                                  .user!
+                                  .posts![index]
+                                  .commentsCount
+                                  .toString()
+                              : '0',
                       postImage:
-                          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-                      likeCounts: '10',
-                      commentCounts: '20',
+                          controller.user.value.user!.posts![index].image !=
+                                      null &&
+                                  controller.user.value.user!.posts!.isNotEmpty
+                              ? SizedBox(
+                                height: screenHeight * 0.25,
+                                width: screenWidth,
+                                child: Image.network(
+                                  baseUrl +
+                                      controller
+                                          .user
+                                          .value
+                                          .user!
+                                          .posts![index]
+                                          .image
+                                          .toString(),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                              : SizedBox.shrink(),
                     );
                   },
                 ),

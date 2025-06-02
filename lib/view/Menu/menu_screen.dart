@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/common/BaseUrl/base_url.dart';
 import 'package:social_media/common/widget/Custom%20Button/custom_button.dart';
 import 'package:social_media/controller/Authentication/logout_controller.dart';
 import 'package:get/get.dart';
 import 'package:social_media/view/Menu/profile/profile_screen.dart';
+import 'package:social_media/controller/User/user_detail_controller.dart';
 
 class MenuScreen extends StatelessWidget {
   MenuScreen({super.key});
   final LogoutController controller = Get.put(LogoutController());
+  final UserDetailController userDetailController = Get.put(
+    UserDetailController(),
+  );
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -42,10 +47,14 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: screenHeight * 0.025,
-                      backgroundColor: Colors.red,
+                      backgroundImage: NetworkImage(
+                        baseUrl +
+                            userDetailController.user.value.user!.profilePicture
+                                .toString(),
+                      ),
                     ),
                     Text(
-                      'User Name',
+                      userDetailController.user.value.user!.name.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,

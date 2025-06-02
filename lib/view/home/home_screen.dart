@@ -56,9 +56,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: PostSection(
-                imageUrl: posts[0]['profile'] ?? '',
-              ),
+              child: PostSection(),
             ),
             Divider(thickness: 3, color: Colors.grey),
             ListView.builder(
@@ -71,7 +69,10 @@ class HomeScreen extends StatelessWidget {
                   name: posts[index]['name'] ?? '',
                   time: posts[index]['time'] ?? "",
                   status: posts[index]['post'] ?? "",
-                  postImage: posts[index]['postImage'] ?? "",
+                  postImage: Image.network(
+                    posts[index]['postImage'] ?? "",
+                    fit: BoxFit.cover,
+                  ),
                   likeCounts: posts[index]['like'] ?? "",
                   commentCounts: posts[index]['comment'] ?? "",
                 );
