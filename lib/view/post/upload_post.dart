@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import '../../controller/upload/upload_post_controller.dart';
 
 class UploadPost extends StatelessWidget {
-  UploadPost({super.key});
-  final uploadPostController = Get.put(UploadPostController());
-
+  final String profile;
+  final String name;
+  UploadPost({super.key, required this.profile, required this.name});
+  final UploadPostController uploadPostController = Get.put(
+    UploadPostController(),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,21 +19,26 @@ class UploadPost extends StatelessWidget {
         title: Text("Create post"),
         centerTitle: true,
         actions: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            width: 60,
-            height: 35,
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Center(
-              child: Text(
-                'Post',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+          InkWell(
+            onTap: () {
+              uploadPostController.createPost();
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              width: 60,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: Text(
+                  'Post',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -49,12 +57,10 @@ class UploadPost extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(
-                          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-                        ),
+                        backgroundImage: NetworkImage(profile),
                       ),
                       Text(
-                        'Meng Lyy',
+                        name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -80,6 +86,7 @@ class UploadPost extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: uploadPostController.contentController,
                       keyboardType: TextInputType.multiline,
                       mouseCursor: SystemMouseCursors.text,
                       maxLines: null,

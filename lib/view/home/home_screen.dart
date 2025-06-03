@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../common/widget/Post Section/post_section.dart';
 import '../../common/widget/news feed/news_feed.dart';
-import '../../common/widget/post/post_section.dart';
+import '../../controller/User/user_detail_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
+
   final List posts = [
     {
       'profile':
@@ -44,6 +47,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UserDetailController());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,7 +60,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: PostSection(),
+              child: Obx(() {
+                return postSection(controller);
+              }),
             ),
             Divider(thickness: 3, color: Colors.grey),
             ListView.builder(

@@ -17,7 +17,7 @@ class ApiService {
   static const String loginApi = "/api/login";
   static const String registerApi = "/api/register";
   static const String userApi = "/api/user";
-  static const String postApi = "/api/post";
+  static const String postApi = "/api/post/create";
   static const String commentApi = "/api/comment";
   static const String likeApi = "/api/like";
   static const String logoutApi = "/api/logout";

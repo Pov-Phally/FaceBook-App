@@ -62,12 +62,11 @@ class LoginController extends GetxController {
           context: Get.context!,
           title: "Success",
           message: "Login successful",
-         showConfirmButton: false,
+          showConfirmButton: false,
           showCancelButton: false,
           duration: const Duration(seconds: 1),
         );
       },
     );
   }
-
 }

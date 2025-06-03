@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:social_media/common/widget/news%20feed/news_feed.dart';
 
 import '../../../common/BaseUrl/base_url.dart';
+import '../../../common/widget/Post Section/post_section.dart';
 import '../../../common/widget/Profile Page/cover_section.dart';
 import '../../../common/widget/Profile Page/profile_section.dart';
-import '../../../common/widget/post/post_section.dart';
 import '../../../controller/User/user_detail_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -59,7 +59,9 @@ class ProfileScreen extends StatelessWidget {
                 // Post Section
                 Padding(
                   padding: EdgeInsets.all(screenWidth * 0.02),
-                  child: PostSection(),
+                  child: Obx(() {
+                    return postSection(controller);
+                  }),
                 ),
                 Divider(thickness: 3, color: Colors.grey),
                 ListView.builder(
