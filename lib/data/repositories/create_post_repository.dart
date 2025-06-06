@@ -27,7 +27,7 @@ class CreatePostRepository extends GetxController {
 
       // Send the POST request
       final response = await api.dio.post(
-        ApiService.postApi,
+        ApiService.createPostApi,
         data: formData,
         options: dio.Options(headers: {'Authorization': 'Bearer $token'}),
       );

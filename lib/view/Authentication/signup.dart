@@ -27,7 +27,7 @@ class SignupScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    Assets.imagesFacebookLogoSignUp,
+                    Assets.imagesFacebookNameLogo,
                     fit: BoxFit.cover,
                     height: 50,
                     width: 200,

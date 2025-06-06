@@ -1,53 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../common/BaseUrl/base_url.dart';
+import '../../common/ShimmerEffect/shimmer_effect.dart';
 import '../../common/widget/Post Section/post_section.dart';
 import '../../common/widget/news feed/news_feed.dart';
+import '../../controller/NewsFeed/news_feed_controller.dart';
 import '../../controller/User/user_detail_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
+  final String defaultProfileImage =
+      "https://www.pngarts.com/files/10/Default-Profile-Picture-Free-PNG-Image.png";
 
-  final List posts = [
-    {
-      'profile':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'name': "nika",
-      'post':
-          'hello worldsdadabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      'postImage':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'like': "100",
-      'comment': "10",
-      'time': "10h ago",
-    },
-    {
-      'profile':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'name': "nika",
-      'post': 'hello world',
-      'postImage':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'like': "100",
-      'comment': "10",
-      'time': "10h ago",
-    },
-    {
-      'profile':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'name': "nika",
-      'post': 'hello world',
-      'postImage':
-          "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      'like': "100",
-      'comment': "10",
-      'time': "10h ago",
-    },
-  ];
+  final double screenHeight = Get.height;
+  final double screenWidth = Get.width;
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(UserDetailController());
+    final postController = Get.put(NewsFeedController());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -55,36 +27,67 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: Obx(() {
-                return postSection(controller);
-              }),
-            ),
-            Divider(thickness: 3, color: Colors.grey),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                return NewsFeed(
-                  profile: posts[index]['profile'] ?? '',
-                  name: posts[index]['name'] ?? '',
-                  time: posts[index]['time'] ?? "",
-                  status: posts[index]['post'] ?? "",
-                  postImage: Image.network(
-                    posts[index]['postImage'] ?? "",
-                    fit: BoxFit.cover,
-                  ),
-                  likeCounts: posts[index]['like'] ?? "",
-                  commentCounts: posts[index]['comment'] ?? "",
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await postController.fetchNewsFeed();
+        },
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 0,
+                ),
+                child: Obx(() {
+                  return postSection(controller);
+                }),
+              ),
+              Divider(thickness: 3, color: Colors.grey),
+              Obx(() {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: postController.newsFeed.value.post?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final post = postController.newsFeed.value.post;
+                    return NewsFeed(
+                      profile:
+                          baseUrl +
+                          post![index].user!.profilePicture.toString(),
+                      name: post[index].user!.name ?? "",
+                      time: post[index].createdAtDuration,
+                      postImage:
+                          post[index].image != null &&
+                                  post[index].image!.isNotEmpty
+                              ? Container(
+                                height: screenHeight * 0.25,
+                                width: screenWidth,
+                                color: Colors.black,
+                                child: Image.network(
+                                  baseUrl + post[index].image.toString(),
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                              : ShimmerEffect(child: SizedBox.shrink()),
+                      status: post[index].content ?? "",
+                      likeCounts:
+                          post[index].likesCount != null &&
+                                  post[index].likesCount! > 0
+                              ? post[index].likesCount!.toString()
+                              : '',
+                      commentCounts:
+                          post[index].commentsCount != null &&
+                                  post[index].commentsCount! > 0
+                              ? "${post[index].commentsCount!.toString()} Comments"
+                              : '',
+                    );
+                  },
                 );
-              },
-            ),
-          ],
+              }),
+            ],
+          ),
         ),
       ),
     );

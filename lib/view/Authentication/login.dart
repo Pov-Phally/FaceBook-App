@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundImage: AssetImage(
-                              Assets.imagesFacebookLogoLogin,
+                              Assets.imagesFacebookLogo,
                             ),
                             radius: 30,
                           ),

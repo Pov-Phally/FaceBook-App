@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/common/BaseUrl/base_url.dart';
+import 'package:social_media/common/ShimmerEffect/shimmer_effect.dart';
 import 'package:social_media/common/widget/Custom%20Button/custom_button.dart';
 import 'package:social_media/controller/Authentication/logout_controller.dart';
 import 'package:get/get.dart';
@@ -8,10 +9,12 @@ import 'package:social_media/controller/User/user_detail_controller.dart';
 
 class MenuScreen extends StatelessWidget {
   MenuScreen({super.key});
-  final LogoutController controller = Get.put(LogoutController());
+
+  final LogoutController logoutController = Get.put(LogoutController());
   final UserDetailController userDetailController = Get.put(
     UserDetailController(),
   );
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -23,7 +26,6 @@ class MenuScreen extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              // Navigate to edit profile screen
               Get.to(
                 () => ProfileScreen(),
                 preventDuplicates: true,
@@ -42,34 +44,53 @@ class MenuScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.01),
-                child: Row(
-                  spacing: screenHeight * 0.01,
-                  children: [
-                    CircleAvatar(
-                      radius: screenHeight * 0.025,
-                      backgroundImage: NetworkImage(
-                        baseUrl +
-                            userDetailController.user.value.user!.profilePicture
-                                .toString(),
-                      ),
-                    ),
-                    Text(
-                      userDetailController.user.value.user!.name.toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+                child: Obx(() {
+                  final user = userDetailController.user.value.user;
+                  return Row(
+                    spacing: screenHeight * 0.01,
+                    children: [
+                      user != null
+                          ? CircleAvatar(
+                            radius: screenHeight * 0.025,
+                            backgroundImage: NetworkImage(
+                              baseUrl + user.profilePicture.toString(),
+                            ),
+                          )
+                          : ShimmerEffect(
+                            child: CircleAvatar(
+                              radius: screenHeight * 0.025,
+                              backgroundColor: Colors.grey.shade300,
+                            ),
+                          ),
+                      user != null
+                          ? Text(
+                            user.name.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                          : ShimmerEffect(
+                            child: Container(
+                              width: screenHeight * 0.2,
+                              height: screenHeight * 0.03,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                    ],
+                  );
+                }),
               ),
             ),
           ),
           Spacer(),
           Padding(
             padding: EdgeInsets.all(screenHeight * 0.02),
-            child: CustomButton(text: 'Logout', onPressed: controller.logout),
+            child: CustomButton(
+              text: 'Logout',
+              onPressed: logoutController.logout,
+            ),
           ),
         ],
       ),

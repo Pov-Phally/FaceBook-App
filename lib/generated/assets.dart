@@ -2,6 +2,8 @@
 class Assets {
   Assets._();
 
-  static const String imagesFacebookLogoSignUp = 'assets/images/facebook.webp.png';
-  static const String imagesFacebookLogoLogin= 'assets/images/Facebook_logo.svg.png';
+  static const String imagesDefaultProfile = 'assets/images/Default_profile.jpg';
+  static const String imagesFacebookNameLogo= 'assets/images/facebook.webp.png';
+  static const String imagesFacebookLogo= 'assets/images/Facebook_logo.svg.png';
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 
 import '../../data/repositories/user_detail_repository.dart';
@@ -9,15 +10,17 @@ class UserDetailController extends GetxController {
   final userDetailRepository = Get.put(UserDetailRepository());
   final LoginController loginController = Get.put(LoginController());
   var user = UserModel().obs;
-  final isLoading = false.obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
     getUserDetails();
+    // Hide the splash screen after initialization
+    FlutterNativeSplash.remove();
     super.onInit();
   }
 
-  void getUserDetails() async {
+  Future<void> getUserDetails() async {
     isLoading.value = true;
     try {
       final token = loginController.storage.read('token');

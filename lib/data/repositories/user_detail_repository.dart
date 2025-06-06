@@ -15,8 +15,13 @@ class UserDetailRepository extends GetxController {
     try {
       final response = await api.dio.get(
         ApiService.userApi,
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        options: Options(
+          headers: {'Authorization': ' Bearer $token'},
+          receiveTimeout: const Duration(seconds: 20),
+          sendTimeout: const Duration(seconds: 20),
+        ),
       );
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         UserModel user = UserModel.fromJson(response.data);
         return Right(user);

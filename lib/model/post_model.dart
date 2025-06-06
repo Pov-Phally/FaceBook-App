@@ -1,75 +1,27 @@
-class UserModel {
-  User? user;
+class PostModel {
+  List<Post>? post;
 
-  UserModel({this.user});
+  PostModel({this.post});
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (user != null) {
-      data['user'] = user!.toJson();
-    }
-    return data;
-  }
-}
-
-class User {
-  int? id;
-  String? name;
-  String? email;
-  String? profilePicture;
-  int? postsCount;
-  int? likesCount;
-  int? commentsCount;
-  List<Posts>? posts;
-
-  User({
-    this.id,
-    this.name,
-    this.email,
-    this.profilePicture,
-    this.postsCount,
-    this.likesCount,
-    this.commentsCount,
-    this.posts,
-  });
-
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    email = json['email'];
-    profilePicture = json['profile_picture'];
-    postsCount = json['posts_count'];
-    likesCount = json['likes_count'];
-    commentsCount = json['comments_count'];
-    if (json['posts'] != null) {
-      posts = <Posts>[];
-      json['posts'].forEach((v) {
-        posts!.add(Posts.fromJson(v));
+  PostModel.fromJson(Map<String, dynamic> json) {
+    if (json['Post'] != null) {
+      post = <Post>[];
+      json['Post'].forEach((v) {
+        post!.add(Post.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['email'] = email;
-    data['profile_picture'] = profilePicture;
-    data['posts_count'] = postsCount;
-    data['likes_count'] = likesCount;
-    data['comments_count'] = commentsCount;
-    if (posts != null) {
-      data['posts'] = posts!.map((v) => v.toJson()).toList();
+    if (post != null) {
+      data['Post'] = post!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Posts {
+class Post {
   int? id;
   int? userId;
   String? content;
@@ -79,10 +31,11 @@ class Posts {
   int? likesCount;
   int? commentsCount;
   bool? liked;
+  User? user;
   List<Likes>? likes;
   List<Comments>? comments;
 
-  Posts({
+  Post({
     this.id,
     this.userId,
     this.content,
@@ -92,11 +45,12 @@ class Posts {
     this.likesCount,
     this.commentsCount,
     this.liked,
+    this.user,
     this.likes,
     this.comments,
   });
 
-  Posts.fromJson(Map<String, dynamic> json) {
+  Post.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     content = json['content'];
@@ -106,6 +60,7 @@ class Posts {
     likesCount = json['likes_count'];
     commentsCount = json['comments_count'];
     liked = json['liked'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     if (json['likes'] != null) {
       likes = <Likes>[];
       json['likes'].forEach((v) {
@@ -118,7 +73,6 @@ class Posts {
         comments!.add(Comments.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -132,6 +86,9 @@ class Posts {
     data['likes_count'] = likesCount;
     data['comments_count'] = commentsCount;
     data['liked'] = liked;
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
     if (likes != null) {
       data['likes'] = likes!.map((v) => v.toJson()).toList();
     }
@@ -140,7 +97,7 @@ class Posts {
     }
     return data;
   }
-  // Inside the Posts class
+
   String get createdAtDuration {
     if (createdAt == null) return '';
     final dateTime = DateTime.parse(createdAt!);
@@ -155,6 +112,7 @@ class Posts {
       return 'Just now';
     }
   }
+
   String get updatedAtDuration {
     if (updatedAt == null) return '';
     final dateTime = DateTime.parse(updatedAt!);
@@ -168,6 +126,31 @@ class Posts {
     } else {
       return 'Just now';
     }
+  }
+}
+
+class User {
+  int? id;
+  String? name;
+  String? email;
+  String? profilePicture;
+
+  User({this.id, this.name, this.email, this.profilePicture});
+
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    email = json['email'];
+    profilePicture = json['profile_picture'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['email'] = email;
+    data['profile_picture'] = profilePicture;
+    return data;
   }
 }
 
@@ -230,8 +213,8 @@ class Comments {
     return data;
   }
 
-  //convert createdAt and updatedAt to duration
   String get createdAtDuration {
+    if (createdAt == null) return '';
     final dateTime = DateTime.parse(createdAt!);
     final duration = DateTime.now().difference(dateTime);
     if (duration.inDays > 0) {
@@ -246,6 +229,7 @@ class Comments {
   }
 
   String get updatedAtDuration {
+    if (updatedAt == null) return '';
     final dateTime = DateTime.parse(updatedAt!);
     final duration = DateTime.now().difference(dateTime);
     if (duration.inDays > 0) {

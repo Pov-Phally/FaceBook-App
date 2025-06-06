@@ -20,12 +20,18 @@ class NewsFeed extends StatelessWidget {
   final String commentCounts;
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //Profile
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenHeight * 0.01,
+            vertical: screenWidth * 0.01,
+          ),
           child: Row(
             spacing: 10,
             children: [
@@ -61,26 +67,37 @@ class NewsFeed extends StatelessWidget {
         SizedBox(height: 10),
         //Status
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenHeight * 0.01,
+            vertical: 0,
+          ),
           child: Text(status, style: TextStyle(fontSize: 16)),
         ),
         SizedBox(height: 10),
         //Post Image
-       postImage,
+        postImage,
         //Like and Comment Count
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenHeight * 0.01,
+            vertical: screenWidth * 0.005,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(likeCounts, style: TextStyle(fontSize: 16)),
-              Text('$commentCounts comment', style: TextStyle(fontSize: 16)),
+              if (likeCounts.isNotEmpty)
+                Text(likeCounts, style: TextStyle(fontSize: 16)),
+              if (commentCounts.isNotEmpty)
+                Text(commentCounts, style: TextStyle(fontSize: 16)),
             ],
           ),
         ),
         //Like, Comment, Share
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenHeight * 0.01,
+            vertical: 0,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -111,7 +128,7 @@ class NewsFeed extends StatelessWidget {
             ],
           ),
         ),
-        Divider(thickness: 3, color: Colors.grey),
+        Divider(thickness: 2, color: Colors.grey),
       ],
     );
   }
